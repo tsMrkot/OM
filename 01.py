@@ -1,12 +1,11 @@
 from sympy import *
 import math
-import numpy as np
 
 eps = 10 ** - 6
 
 x = Symbol('x')
 val = x*x - sin(x)
-func = lambdify(x, val, modules=['numpy'])
+func = lambdify(x, val)
 
 
 def diff_func(diff_level):
@@ -35,16 +34,21 @@ def tangent_method ():
     i = 0
     a = 0
     b = math.pi / 2
-    fun = 0
-    tang = 0
-    dif = lambdify(x, diff_func(1), modules=['numpy'])
+    fun = func(a)
+    tang = func(b)
+    dif = lambdify(x, diff_func(1))
 
-    xm = (func(b) - func(a) + dif(a)*a - dif(b)*b)/(dif(a)) - dif(b)
-    print (xm)
-    while abs(fun - tang) >= eps:
-        xm = (func(b) - func(a) + dif(a)*a - dif(b)*b)/(dif(a)) - dif(b)
-        print (xm)
-
+    while i <= 3:
+        print([float(dif(a)), float(dif(b))])
+        xm = -1 *(dif(a)*a - func(a) + dif(b)*b - func(b))/(dif(a) - dif(b))
+        y = dif(xm)
+        if y < 0: a = xm
+        else: b = xm
+        #y1 = lambdify(x, func(a) + dif(a)*(x-a))
+        #y2 = lambdify(x, func(b) + dif(b)*(x-b))
+        print(float(xm))
+        print([float(a), float(b)])
+        i += 1
 
 tangent_method()
 #golden_ratio_method()
